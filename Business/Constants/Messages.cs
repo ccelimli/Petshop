@@ -77,7 +77,7 @@ namespace Business.Constants
         public static string ImageUpdated = "Fotoğraf Güncellendi";
         public static string ImageListed = "Fotoğraf Listelendi";
         public static string ImagesListed = "Fotoğraflar Listelendi";
-        public static string ImagesLimitExceeded = "Bir Ürün En Fazla 5 Fotoğrafa Sahip Olabilir!";
+        public static string ProductImageLimitExceded = "Bir Ürün En Fazla 5 Fotoğrafa Sahip Olabilir!";
         public static string ImageNotFound = "Fotoğraf bulunamadı!";
         public static string ImageNotUpdated = "Güncellenme esnasında bir hata oluştu!";
     }

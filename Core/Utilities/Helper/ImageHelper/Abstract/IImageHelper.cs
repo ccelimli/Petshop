@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Utilities.Results.Abstract;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ namespace Core.Utilities.Helper
 {
     public interface IImageHelper
     {
-        string Add(IFormFile image, string root);
-        void Delete(string imagePath);
-        string Update(IFormFile image, string imagePath, string root);
+        IResult Upload(IFormFile file, string root);
+        IResult Delete(string filePath);
+        IResult Update(IFormFile file, string filePath, string root);
     }
 }

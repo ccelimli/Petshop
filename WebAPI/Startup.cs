@@ -33,27 +33,7 @@ namespace WebAPI
         {
 
             services.AddControllers();
-            /*
-            //Product
-            services.AddSingleton<IProductService, ProductManager>();
-            services.AddSingleton<IProductDal, ProductDal>();
 
-            //Brand
-            services.AddSingleton<IBrandService, BrandManager>();
-            services.AddSingleton<IBrandDal, BrandDal>();
-
-            //User
-            services.AddSingleton<IUserService, UserManager>();
-            services.AddSingleton<IUserDal, UserDal>();
-
-            //Category
-            services.AddSingleton<ICategoryService, CategoryManager>();
-            services.AddSingleton<ICategoryDal, CategoryDal>();
-
-            //Animal
-            services.AddSingleton<IAnimalService, AnimalManager>();
-            services.AddSingleton<IUserDal, UserDal>();
-             */
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPI", Version = "v1" });
@@ -79,6 +59,7 @@ namespace WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
             });
         }
     }

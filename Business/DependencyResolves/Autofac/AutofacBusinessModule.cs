@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using Core.Utilities.Helper;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
@@ -39,9 +40,12 @@ namespace Business.DependencyResolves.Autofac
             builder.RegisterType<AnimalManager>().As<IAnimalService>().SingleInstance();
             builder.RegisterType<AnimalDal>().As<IAnimalDal>().SingleInstance();
 
-            //Product Image
+            //ProductImage
             builder.RegisterType<ProductImageManager>().As<IProductImageService>().SingleInstance();
             builder.RegisterType<ProductImageDal>().As<IProductImageDal>().SingleInstance();
+
+            //ImageHelper
+            builder.RegisterType<ImageHelper>().As<IImageHelper>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

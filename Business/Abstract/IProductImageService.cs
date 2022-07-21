@@ -14,9 +14,10 @@ namespace Business.Abstract
     {
         IResult Add(IFormFile file, ProductImage productImage);
         IResult Delete(ProductImage productImage);
-        IResult Update(IFormFile file, ProductImage productImage,string destination);
-        IDataResult<List<ProductImage>> GetAll(Expression<Func<ProductImage,bool>> filter=null); 
-        IDataResult<List<ProductImage>> GetById(int Id);
+        IResult Update(IFormFile file, ProductImage productImage);
+        IDataResult<List<ProductImage>> GetAll();
+        IDataResult<ProductImage> GetByImageId(int Id);
+        IDataResult<List<ProductImage>> GetByProductId(int productId);
 
     }
 }

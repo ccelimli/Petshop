@@ -29,29 +29,105 @@ namespace Business.Concrete
             _productImageDal = productImageDal;
         }
 
+        //Add
+        [ValidationAspect(typeof(ProductImageValidator))]
         public IResult Add(IFormFile file, ProductImage productImage)
         {
-            IResult result=BusinessRules.Run()
+            var result = BusinessRules.Run(CheckIfProductImageLimit(productImage.ProductId));
+            if (result != null)
+            {
+                return result;
+            }
+
+            var resultofUpload = _imageHelper.Upload(file, PathConstant.ImagePath);
+            if (!resultofUpload.Success)
+            {
+                return resultofUpload;
+            }
+            productImage.ImagePath = resultofUpload.Message;
+            productImage.Date = DateTime.Now;
+
+            _productImageDal.Add(productImage);
+            return new SuccessResult(Messages.ImageAdded);
         }
 
+        //Delete
         public IResult Delete(ProductImage productImage)
         {
-            throw new NotImplementedException();
+            var result = _imageHelper.Delete(PathConstant.ImagePath + productImage.ImagePath);
+            if (!result.Success)
+            {
+                return result;
+            }
+            _productImageDal.Delete(productImage);
+            return new SuccessResult(Messages.ImageDeleted);
         }
 
-        public IDataResult<List<ProductImage>> GetAll(Expression<Func<ProductImage, bool>> filter = null)
+        //GetAll
+        public IDataResult<List<ProductImage>> GetAll()
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll(), Messages.ImagesListed);
         }
 
-        public IDataResult<List<ProductImage>> GetById(int Id)
+        public IDataResult<ProductImage> GetByImageId(int Id)
         {
-            throw new NotImplementedException();
+            return new SuccessDataResult<ProductImage>(_productImageDal.Get(productImage => productImage.Id == Id), Messages.ImageListed);
         }
 
-        public IResult Update(IFormFile file, ProductImage productImage, string destination)
+        public IDataResult<List<ProductImage>> GetByProductId(int productId)
         {
-            throw new NotImplementedException();
+            IResult result = BusinessRules.Run(CheckProductImageCount(productId));
+            if (result != null)
+            {
+                return GetDefaultImage(productId);
+            }
+            return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll(productImage => productImage.ProductId == productId), Messages.ImagesListed);
+        }
+
+        public IResult Update(IFormFile file, ProductImage productImage)
+        {
+            var result = _imageHelper.Update(file, PathConstant.ImagePath + productImage.ImagePath, PathConstant.ImagePath);
+            if (!result.Success)
+            {
+                return result;
+            }
+
+            productImage.Date = DateTime.Now;
+            productImage.ImagePath = result.Message;
+
+            _productImageDal.Update(productImage);
+            return new SuccessResult(Messages.ImageUpdated);
+        }
+
+        //GetDefaultImage
+        private IDataResult<List<ProductImage>> GetDefaultImage(int productId)
+        {
+            var defaultProductImage = new List<ProductImage>();
+            defaultProductImage.Add(new ProductImage { ProductId = productId, Date = DateTime.Now, ImagePath = "no-photos.png" });
+
+            return new SuccessDataResult<List<ProductImage>>(defaultProductImage);
+        }
+
+        //CheckIfProductImageLimit
+        private IResult CheckIfProductImageLimit(int productId)
+        {
+            var result = _productImageDal.GetAll(productImage => productImage.ProductId == productId);
+            if (result.Count >= 5)
+            {
+                return new ErrorResult(Messages.ProductImageLimitExceded);
+            }
+            return new SuccessResult();
+        }
+
+        //CheckProductImageCount
+        private IResult CheckProductImageCount(int productId)
+        {
+            var result = _productImageDal.GetAll(productImage => productImage.ProductId == productId).Count;
+            if (result > 0)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult();
         }
     }
 }

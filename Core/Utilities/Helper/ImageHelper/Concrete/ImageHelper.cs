@@ -12,43 +12,83 @@ namespace Core.Utilities.Helper
 {
     public class ImageHelper : IImageHelper
     {
-        public void Delete(string imagePath) //imagePath: ProductImageManager'dan gelen dosyanın kaydedildiği adres ve adı;
+        public IResult Delete(string filePath)
         {
-            if (File.Exists(imagePath)) // Dosyanın varlığı kontrol edildi.
+            DeleteOldImageFile(filePath);
+            return new SuccessResult();
+        }
+
+        public IResult Update(IFormFile file, string filePath, string root)
+        {
+            DeleteOldImageFile(filePath);
+            return Upload(file, root);
+        }
+
+        public IResult Upload(IFormFile file, string root)
+        {
+            var fileExists = CheckFileExists(file);
+            if (fileExists.Message != null)
             {
-                File.Delete(imagePath);
+                return new ErrorResult(fileExists.Message);
+            }
+            var extension = Path.GetExtension(file.FileName);
+            var extensionValid = CheckFileExtensionValid(extension);
+            string guid = Guid.NewGuid().ToString();
+            string filePath = guid + extension;
+
+            if (extensionValid.Message != null)
+            {
+                return new ErrorResult(extensionValid.Message);
+            }
+
+            CheckDirectoryExists(root);
+            CreateImageFile(root + filePath, file);
+            return new SuccessResult(filePath);
+        }
+
+        //Control Methods
+
+        private static IResult CheckFileExists(IFormFile file)
+        {
+            if (file != null && file.Length > 0)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult("Dosya yok");
+        }
+
+        private static IResult CheckFileExtensionValid(string extension)
+        {
+            if (extension != ".jpeg" && extension != ".png" && extension != ".jpg")
+            {
+                return new ErrorResult("Hatalı dosya uzantısı");
+            }
+            return new SuccessResult();
+        }
+
+        private static void CheckDirectoryExists(string root)
+        {
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
             }
         }
 
-        public string Update(IFormFile image, string imagePath, string root) //Güncellenecek yeni dosya, Eski dosyanın kayıt dizini ve yeni bir kayıt dizini
+        private static void CreateImageFile(string directory, IFormFile file)
         {
-            if (File.Exists(imagePath))
+            using (FileStream fileStream = File.Create(directory))
             {
-                File.Delete(imagePath); // Güncelleme için öncelikle eski dosya silindi.
+                file.CopyTo(fileStream);
+                fileStream.Flush();
             }
-            return Add(image, root); // Eski dosya silindikten sonra yeni dosya için alttaki Add methodu kullanılarak yeni dosyayı ekledik
         }
 
-        public string Add(IFormFile image, string root)
+        private static void DeleteOldImageFile(string filePath)
         {
-            if (image.Length>0) // image.leght dosya uzunluğunu  bayt olarak alır. Dosyayı test eder.
+            if (File.Exists(filePath))
             {
-                if (!Directory.Exists(root))
-                {
-                    Directory.CreateDirectory(root);
-                }
-                string extension = Path.GetExtension(image.FileName);
-                string guid = GuidHelpers.CreateGuid();
-                string imagePath = guid + extension;
-
-                using(FileStream imageStream = File.Create(root + imagePath))
-                {
-                    image.CopyTo(imageStream);
-                    imageStream.Flush();
-                    return imagePath;
-                }
+                File.Delete(filePath);
             }
-            return null;
         }
     }
 }

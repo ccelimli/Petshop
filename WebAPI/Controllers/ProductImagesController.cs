@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[contreller]")]
+    [Route("api/[controller]")]
+    [ApiController]
     public class ProductImagesController:ControllerBase
     {
         IProductImageService _productImageService;
@@ -19,7 +21,32 @@ namespace WebAPI.Controllers
         }
 
         //Add
-        [HttpGet("getAll")]
+        [HttpPost("add")]
+        public IActionResult Add([FromForm(Name ="Image")] IFormFile file, [FromForm] ProductImage productImage)
+        {
+            var result = _productImageService.Add(file, productImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        //Delete
+        [HttpDelete("delete")]
+        public IActionResult Delete(ProductImage productImage)
+        {
+            var productDeleteImage=_productImageService.GetByProductId(productImage.ProductId).Data;
+            var result=_productImageService.Delete(productImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        //GetAll
+        [HttpGet("getall")]
         public IActionResult GetAll()
         {
             var result = _productImageService.GetAll();
@@ -30,24 +57,40 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        public IActionResult Add(ProductImage productImage)
+        //GetById
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
         {
-            var result = _productImageService.Add(productImage);
+            var result = _productImageService.GetByImageId(id);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
         }
-        [HttpDelete("delete")]
-        public IActionResult Delete(ProductImage productImage)
+
+        //GetByProductId
+        [HttpGet("getbyproductid")]
+        public IActionResult GetByProductId(int id)
         {
-            var result = _productImageService.Delete(productImage);
+            var result = _productImageService.GetByProductId(id);
             if (result.Success)
             {
                 return Ok(result);
             }
-            return BadRequest(result); 
+            return BadRequest(result);
+        }
+
+        //Update
+        [HttpPost("update")]
+        public IActionResult Update([FromForm] IFormFile file, [FromForm] ProductImage productImage)
+        {
+            var result = _productImageService.Update(file, productImage);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

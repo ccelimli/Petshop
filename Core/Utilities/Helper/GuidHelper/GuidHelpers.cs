@@ -11,10 +11,7 @@ namespace Core.Utilities.Helper.GuidHelper
         public static string CreateGuid()
         {
 
-            return Guid.NewGuid().ToString(); // Guid.NewGuid() ile eşsiz bir değer oluşturduk.
+            return Guid.NewGuid().ToString();
         }
     }
 }
-/*
- *  Yüklediğimiz dosya içerisinde eşsiz bir isim olurduk. Yani dosya eklerken dosyanın adı kendi olmasın. Biz ona bir isim oluşturalım ki aynı isimde başka bir dosya çakışmasınlar
- */
