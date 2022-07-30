@@ -12,7 +12,7 @@ namespace Business.ValidationRules.FluentValidation
     {
         public ProductImageValidator()
         {
-            RuleFor(p => p.ProductId).NotNull();
+            RuleFor(productImage => productImage.ProductId).NotNull();
         }
     }
 }

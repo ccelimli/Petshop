@@ -29,7 +29,7 @@ namespace Business.Concrete
             _productImageDal = productImageDal;
         }
 
-        //Add
+        // Add
         [ValidationAspect(typeof(ProductImageValidator))]
         public IResult Add(IFormFile file, ProductImage productImage)
         {
@@ -51,7 +51,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ImageAdded);
         }
 
-        //Delete
+        // Delete
         public IResult Delete(ProductImage productImage)
         {
             var result = _imageHelper.Delete(PathConstant.ImagePath + productImage.ImagePath);
@@ -63,17 +63,19 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ImageDeleted);
         }
 
-        //GetAll
+        // GetAll
         public IDataResult<List<ProductImage>> GetAll()
         {
             return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll(), Messages.ImagesListed);
         }
 
+        // GetByImageId
         public IDataResult<ProductImage> GetByImageId(int Id)
         {
             return new SuccessDataResult<ProductImage>(_productImageDal.Get(productImage => productImage.Id == Id), Messages.ImageListed);
         }
 
+        // GetByProductId
         public IDataResult<List<ProductImage>> GetByProductId(int productId)
         {
             IResult result = BusinessRules.Run(CheckProductImageCount(productId));
@@ -84,6 +86,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll(productImage => productImage.ProductId == productId), Messages.ImagesListed);
         }
 
+        // Update
         public IResult Update(IFormFile file, ProductImage productImage)
         {
             var result = _imageHelper.Update(file, PathConstant.ImagePath + productImage.ImagePath, PathConstant.ImagePath);
@@ -99,7 +102,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ImageUpdated);
         }
 
-        //GetDefaultImage
+        // GetDefaultImage
         private IDataResult<List<ProductImage>> GetDefaultImage(int productId)
         {
             var defaultProductImage = new List<ProductImage>();
@@ -108,7 +111,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductImage>>(defaultProductImage);
         }
 
-        //CheckIfProductImageLimit
+        // CheckIfProductImageLimit
         private IResult CheckIfProductImageLimit(int productId)
         {
             var result = _productImageDal.GetAll(productImage => productImage.ProductId == productId);
@@ -119,7 +122,7 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        //CheckProductImageCount
+        // CheckProductImageCount
         private IResult CheckProductImageCount(int productId)
         {
             var result = _productImageDal.GetAll(productImage => productImage.ProductId == productId).Count;

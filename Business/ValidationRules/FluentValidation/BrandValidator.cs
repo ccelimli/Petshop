@@ -12,9 +12,8 @@ namespace Business.ValidationRules.FluentValidation
     {
         public BrandValidator()
         {
-            RuleFor(b => b.BrandName).NotEmpty().WithMessage("Marka İsmi Boş Olamaz");
-            RuleFor(b => b.BrandName).MinimumLength(2).WithMessage("Marka İsmi En Az 2 Karakter Olmalıdır.");
-            
+            RuleFor(brand => brand.BrandName).NotEmpty().WithMessage("Marka İsmi Boş Olamaz");
+            RuleFor(brand => brand.BrandName).MinimumLength(2).WithMessage("Marka İsmi En Az 2 Karakter Olmalıdır.");
         }
     }
 }

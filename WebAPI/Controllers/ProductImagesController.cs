@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             _productImageService = productImageService;
         }
 
-        //Add
+        // Add
         [HttpPost("add")]
         public IActionResult Add([FromForm(Name ="Image")] IFormFile file, [FromForm] ProductImage productImage)
         {
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        //Delete
+        // Delete
         [HttpDelete("delete")]
         public IActionResult Delete(ProductImage productImage)
         {
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        //GetAll
+        // GetAll
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        //GetById
+        // GetById
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
@@ -69,7 +69,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        //GetByProductId
+        // GetByProductId
         [HttpGet("getbyproductid")]
         public IActionResult GetByProductId(int id)
         {
@@ -81,7 +81,7 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        //Update
+        // Update
         [HttpPost("update")]
         public IActionResult Update([FromForm] IFormFile file, [FromForm] ProductImage productImage)
         {

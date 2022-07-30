@@ -20,7 +20,8 @@ namespace Business.Concrete
         {
             _categoryDal = categoryDal;
         }
-
+        
+        // Add
         public IResult Add(Category category)
         {
             if (category.CategoryName.Length<2)
@@ -34,22 +35,26 @@ namespace Business.Concrete
             }
         }
 
+        // Delete
         public IResult Delete(Category category)
         {
             _categoryDal.Delete(category);
             return new SuccessResult(Messages.CategoryDeleted);
         }
 
+        // GetAll
         public IDataResult<List<Category>> GetAll()
         {
             return new SuccessDataResult<List<Category>>( _categoryDal.GetAll(), Messages.CategoriesListed);
         }
 
+        //GetById
         public IDataResult<List<Category>> GetById(int id)
         {
-            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(c => c.CategoryId == id), Messages.CategoryListed);
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll(category => category.CategoryId == id), Messages.CategoryListed);
         }
 
+        //Update
         public IResult Update(Category category)
         {
             _categoryDal.Update(category);

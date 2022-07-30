@@ -5,6 +5,8 @@ using Business.Concrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Helper;
 using Core.Utilities.Interceptors;
+using Core.Utilities.Security.JWT.Abstract;
+using Core.Utilities.Security.JWT.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using PetShop.DataAccess.Abstract;
@@ -20,6 +22,15 @@ namespace Business.DependencyResolves.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
+            //Auth
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+
+            //FileHelper
+            builder.RegisterType<ImageHelper>().As<IImageHelper>().SingleInstance();
+
+            //JWT
+            builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
+
             //Product
             builder.RegisterType<ProductManager>().As<IProductService>().SingleInstance();
             builder.RegisterType<ProductDal>().As<IProductDal>().SingleInstance();

@@ -12,7 +12,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
     <PackageReference Include="Uno.UI" Version="4.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SourceGeneratorInput Remove="Entities\Concrete\OperationClaim.cs" />
   </ItemGroup>
 
 </Project>

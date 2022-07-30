@@ -1,9 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Entities.Concrete;
+using Core.Utilities.Business;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
-using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,22 +24,15 @@ namespace Business.Concrete
             _userDal = userDal;
         }
 
+        // Add
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Add(User user)
         {
-            if (user.FirstName == null || user.LastName == null || user.Email == null || user.Password == null)
+            IResult result = BusinessRules.Run(CheckAlreadyRegisteredUser(user.Email, user.PhoneNumber));
+
+            if (result != null)
             {
-                return new ErrorResult(Messages.UserMissingInfo);
-            }
-            foreach (var users in _userDal.GetAll())
-            {
-                if (users.Email == user.Email)
-                {
-                    return new ErrorResult(Messages.UserRegistered);
-                }
-            }
-            if (user.Password.Length < 6 || user.Password.Length > 20)
-            {
-                return new ErrorResult(Messages.UserPasswordInvalid);
+                return result;
             }
             else
             {
@@ -45,39 +41,80 @@ namespace Business.Concrete
             }
         }
 
+        // Delete
         public IResult Delete(User user)
         {
             _userDal.Delete(user);
             return new SuccessResult(Messages.UserDeleted);
         }
 
+        // GetAll
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
         }
 
-        public IDataResult<List<User>> GetByFirstName(string FirstName)
+        // GetByEmail
+        public IDataResult<User> GetByEmail(string email)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.FirstName == FirstName), Messages.UsersListed);
+            return new SuccessDataResult<User>(_userDal.Get(user => user.Email == email), Messages.UserListed);
         }
 
+        // GetByFirstName
+        public IDataResult<List<User>> GetByFirstName(string Name)
+        {
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(user => user.FirstName == Name), Messages.UsersListed);
+        }
+
+        // GetById
         public IDataResult<User> GetById(int Id)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.Id == Id), Messages.UserListed);
+            return new SuccessDataResult<User>(_userDal.Get(user => user.Id == Id), Messages.UserListed);
         }
 
-        public IDataResult<List<User>> GetByLastName(string LastName)
+        // GetByLastName
+        public IDataResult<List<User>> GetByLastName(string lastName)
         {
-            return new SuccessDataResult<List<User>>(_userDal.GetAll(u => u.LastName == LastName), Messages.UsersListed);
+            return new SuccessDataResult<List<User>>(_userDal.GetAll(user => user.LastName == lastName), Messages.UsersListed);
         }
 
+        // GetByPhoneNumber
+        public IDataResult<User> GetByPhoneNumber(string PhoneNumber)
+        {
+            return new SuccessDataResult<User>(_userDal.Get(user => user.PhoneNumber == PhoneNumber));
+        }
 
-
-
+        // Update
         public IResult Update(User user)
         {
             _userDal.Update(user);
             return new SuccessResult(Messages.UserUpdated);
+        }
+
+        // GetClaims
+        public IDataResult<List<OperationClaim>> GetClaims(User user)
+        {
+            return new SuccessDataResult<List<OperationClaim>>(_userDal.GetClaims(user));
+        }
+
+        // CheckAlreadyRegisteredUser
+        private IResult CheckAlreadyRegisteredUser(string email, string phoneNumber)
+        {
+            var resultEmail = _userDal.GetAll(user => user.Email == email).Any();
+            var resultPhoneNumber = _userDal.GetAll(user => user.PhoneNumber == phoneNumber).Any();
+
+            if (resultEmail)
+            {
+                return new ErrorResult(Messages.AlreadyRegistedEmail);
+            }
+            if (resultPhoneNumber)
+            {
+                return new ErrorResult(Messages.AlreadyRegistedPhoneNumber);
+            }
+            else
+            {
+                return new SuccessResult();
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Business.Concrete
             _orderDal = orderDal;
         }
 
+        // Add
         public IResult Add(Order order)
         {
             if (order.OrderDate.ToString() == null)
@@ -34,32 +35,38 @@ namespace Business.Concrete
             }
         }
 
+        // Delete
         public IResult Delete(Order order)
         {
             _orderDal.Delete(order);
             return new SuccessResult(Messages.OrderDeleted);
         }
 
+        // GetAll
         public IDataResult<List<Order>> GetAll()
         {
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll(), Messages.OrdersListed);
         }
 
+        //GetByCustomerId
         public IDataResult<List<Order>> GetByCustomerId(int CustomerId)
         {
-            return new SuccessDataResult<List<Order>>(_orderDal.GetAll(o => o.CustomerId == CustomerId), Messages.OrdersListed);
+            return new SuccessDataResult<List<Order>>(_orderDal.GetAll(order => order.CustomerId == CustomerId), Messages.OrdersListed);
         }
 
+        //GetById
         public IDataResult<Order> GetById(int id)
         {
-            return new SuccessDataResult<Order>(_orderDal.Get(o => o.OrderId == id), Messages.OrderListed);
+            return new SuccessDataResult<Order>(_orderDal.Get(order => order.OrderId == id), Messages.OrderListed);
         }
 
+        // GetByOrderDate
         public IDataResult<List<Order>> GetByOrderDate(DateTime orderDate)
         {
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll(o => o.OrderDate == orderDate), Messages.OrdersListed);
         }
 
+        // GetByProductId
         public IDataResult<List<Order>> GetByProductId(int ProductId)
         {
             return new SuccessDataResult<List<Order>>(_orderDal.GetAll(o => o.ProductId == ProductId), Messages.OrdersListed);

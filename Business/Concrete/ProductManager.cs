@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -26,46 +27,53 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        // Add
+        [SecuredOperation("Product.List,Admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-
             _productDal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
-
         }
 
+        // Delete
         public IResult Delete(Product product)
         {
             _productDal.Delete(product);
             return new SuccessResult(Messages.ProductDeleted);
         }
 
+        // GetAll
         public IDataResult<List<Product>> GetAll()
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
+        // GetByAnimalId
         public IDataResult<List<Product>> GetByAnimalId(int id)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.AnimalId == id), Messages.ProductsListed);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(product => product.AnimalId == id), Messages.ProductsListed);
         }
 
+        // GetByBrandId
         public IDataResult<List<Product>> GetByBrandId(int id)
         {
-            return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.BrandId == id), Messages.ProductsListed);
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(product => product.BrandId == id), Messages.ProductsListed);
         }
 
+        // GetById
         public IDataResult<Product> GetById(int productId)
         {
-            return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId), Messages.ProductListed);
+            return new SuccessDataResult<Product>(_productDal.Get(product => product.ProductId == productId), Messages.ProductListed);
         }
 
+        // GetProductDetails
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetail(), Messages.ProductsListed);
         }
 
+        // Update
         public IResult Update(Product product)
         {
             _productDal.Update(product);

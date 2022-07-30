@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entites.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,6 +23,7 @@ namespace WebAPI.Controllers
         }
 
         //GetAll
+        [Authorize(Roles ="Product.List")]
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {

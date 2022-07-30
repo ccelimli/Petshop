@@ -19,6 +19,7 @@ namespace Business.Concrete
             _animalDal = animalDal;
         }
 
+        // Add
         public IResult Add(Animal animal)
         {
             if (animal.AnimalName.Length < 2)
@@ -32,22 +33,26 @@ namespace Business.Concrete
             }
         }
 
+        //Delete
         public IResult Delete(Animal animal)
         {
             _animalDal.Delete(animal);
             return new SuccessResult(Messages.AnimalDeleted);
         }
 
+        // GetAll
         public IDataResult<List<Animal>> GetAll()
         {
             return new SuccessDataResult<List<Animal>>(_animalDal.GetAll(), Messages.AnimalsListed);
         }
 
+        // GetById
         public IDataResult<List<Animal>> GetById(int id)
         {
-            return new SuccessDataResult<List<Animal>>(_animalDal.GetAll(a => a.AnimalId == id),Messages.AnimalListed);
+            return new SuccessDataResult<List<Animal>>(_animalDal.GetAll(animal => animal.AnimalId == id),Messages.AnimalListed);
         }
 
+        // Update
         public IResult Update(Animal animal)
         {
             _animalDal.Update(animal);

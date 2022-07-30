@@ -21,6 +21,7 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
+        // Add
         public IResult Add(Customer customer)
         {
       
@@ -28,25 +29,27 @@ namespace Business.Concrete
                 return new SuccessResult(Messages.CustomerAdded);
             
         }
-
+        // Delete
         public IResult Delete(Customer customer)
         {
             _customerDal.Delete(customer);
             return new SuccessResult(Messages.CustomerDeleted);
         }
 
+        // GetAll
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll(), Messages.CustomersListed);
         }
 
-
+        // GetById
         public IDataResult<Customer> GetById(int Id)
         {
 
-            return new SuccessDataResult<Customer>(_customerDal.Get(c => c.UserId== Id), Messages.CustomerListed);
+            return new SuccessDataResult<Customer>(_customerDal.Get(customer => customer.UserId== Id), Messages.CustomerListed);
         }
         
+        // Update
         public IResult Update(Customer customer)
         {
             _customerDal.Update(customer);
