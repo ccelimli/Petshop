@@ -1,6 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolves.Autofac;
+using Core.DependyResolvers;
+using Core.Extensions;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT.Concrete;
@@ -14,7 +16,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterMod
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("https://localhost:7166"));
@@ -36,7 +38,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
-ServiceTool.Create(builder.Services);
+builder.Services.AddDependencyResolvers(new ICoreModule[]
+{
+    new CoreModule()
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
+using Business.BusinessAspect.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Helper;
@@ -30,6 +32,7 @@ namespace Business.Concrete
         }
 
         // Add
+        [SecuredOperation("productimage.add,admin")]
         [ValidationAspect(typeof(ProductImageValidator))]
         public IResult Add(IFormFile file, ProductImage productImage)
         {
@@ -52,6 +55,7 @@ namespace Business.Concrete
         }
 
         // Delete
+        [SecuredOperation("productimage.delete,admin")]
         public IResult Delete(ProductImage productImage)
         {
             var result = _imageHelper.Delete(PathConstant.ImagePath + productImage.ImagePath);
@@ -64,18 +68,21 @@ namespace Business.Concrete
         }
 
         // GetAll
+        [CacheAspect]
         public IDataResult<List<ProductImage>> GetAll()
         {
             return new SuccessDataResult<List<ProductImage>>(_productImageDal.GetAll(), Messages.ImagesListed);
         }
 
         // GetByImageId
+        [CacheAspect]
         public IDataResult<ProductImage> GetByImageId(int Id)
         {
             return new SuccessDataResult<ProductImage>(_productImageDal.Get(productImage => productImage.Id == Id), Messages.ImageListed);
         }
 
         // GetByProductId
+        [CacheAspect]
         public IDataResult<List<ProductImage>> GetByProductId(int productId)
         {
             IResult result = BusinessRules.Run(CheckProductImageCount(productId));
@@ -87,6 +94,7 @@ namespace Business.Concrete
         }
 
         // Update
+        [SecuredOperation("productimage.update,admin")]
         public IResult Update(IFormFile file, ProductImage productImage)
         {
             var result = _imageHelper.Update(file, PathConstant.ImagePath + productImage.ImagePath, PathConstant.ImagePath);

@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Business;
@@ -49,42 +50,49 @@ namespace Business.Concrete
         }
 
         // GetAll
+        [CacheAspect]
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(), Messages.UsersListed);
         }
 
         // GetByEmail
+        [CacheAspect]
         public IDataResult<User> GetByEmail(string email)
         {
             return new SuccessDataResult<User>(_userDal.Get(user => user.Email == email), Messages.UserListed);
         }
 
         // GetByFirstName
+        [CacheAspect]
         public IDataResult<List<User>> GetByFirstName(string Name)
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(user => user.FirstName == Name), Messages.UsersListed);
         }
 
         // GetById
+        [CacheAspect]
         public IDataResult<User> GetById(int Id)
         {
             return new SuccessDataResult<User>(_userDal.Get(user => user.Id == Id), Messages.UserListed);
         }
 
         // GetByLastName
+        [CacheAspect]
         public IDataResult<List<User>> GetByLastName(string lastName)
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(user => user.LastName == lastName), Messages.UsersListed);
         }
 
         // GetByPhoneNumber
+        [CacheAspect]
         public IDataResult<User> GetByPhoneNumber(string PhoneNumber)
         {
             return new SuccessDataResult<User>(_userDal.Get(user => user.PhoneNumber == PhoneNumber));
         }
 
         // Update
+        [ValidationAspect(typeof(UserValidator))]
         public IResult Update(User user)
         {
             _userDal.Update(user);

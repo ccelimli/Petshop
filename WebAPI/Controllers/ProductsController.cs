@@ -23,7 +23,6 @@ namespace WebAPI.Controllers
         }
 
         //GetAll
-        [Authorize(Roles ="Product.List")]
         [HttpGet("getAll")]
         public IActionResult GetAll()
         {

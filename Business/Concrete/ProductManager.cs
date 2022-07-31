@@ -2,6 +2,7 @@
 using Business.BusinessAspect.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Caching;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results.Abstract;
@@ -28,7 +29,7 @@ namespace Business.Concrete
         }
 
         // Add
-        [SecuredOperation("Product.List,Admin")]
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -37,12 +38,14 @@ namespace Business.Concrete
         }
 
         // Delete
+        [SecuredOperation("product.delete,admin")]
         public IResult Delete(Product product)
         {
             _productDal.Delete(product);
             return new SuccessResult(Messages.ProductDeleted);
         }
 
+        [CacheAspect]
         // GetAll
         public IDataResult<List<Product>> GetAll()
         {
@@ -50,30 +53,36 @@ namespace Business.Concrete
         }
 
         // GetByAnimalId
+        [CacheAspect]
         public IDataResult<List<Product>> GetByAnimalId(int id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(product => product.AnimalId == id), Messages.ProductsListed);
         }
 
         // GetByBrandId
+        [CacheAspect]
         public IDataResult<List<Product>> GetByBrandId(int id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(product => product.BrandId == id), Messages.ProductsListed);
         }
 
         // GetById
+        [CacheAspect]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(product => product.ProductId == productId), Messages.ProductListed);
         }
 
         // GetProductDetails
+        [CacheAspect]
         public IDataResult<List<ProductDetailDto>> GetProductDetails()
         {
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetail(), Messages.ProductsListed);
         }
 
         // Update
+        [SecuredOperation("product.update,admin")]
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
             _productDal.Update(product);
