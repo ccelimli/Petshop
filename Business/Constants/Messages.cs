@@ -50,16 +50,6 @@ namespace Business.Constants
         public static string OrdersListed = "Siparişler Listelendi.";
         public static string OrdersCanceled = "Sipariş İptal Edildi.";
 
-        // Customer 
-        public static string CustomerAdded = "Müşteri Eklendi";
-        public static string CustomerDeleted = "Müşteri Silindi";
-        public static string CustomerUpdated = "Müşteri Bilgileri Güncellendi.";
-        public static string CustomersListed = "Müşteriler Listelendi";
-        public static string CustomerMissingInfo = "Müşteri bilgileri eksiksiz doldurulmalıdır! ";
-        public static string CustomerRegistered = "Kayıtlı Kullanıcı!";
-        public static string CustomerPasswordInvalid = "Parola 6 karakterden az veya 20 karakterden fazla olamaz!";
-        public static string CustomerNotFound = "Müşteri Bulunamadı!";
-
         // User 
         public static string UserAdded = "Kullanıcı Eklendi";
         public static string UserDeleted = "Kullanıcı Silindi";
@@ -83,9 +73,9 @@ namespace Business.Constants
         public static string ImageNotUpdated = "Güncellenme esnasında bir hata oluştu!";
 
         // System
-        public static string SuccessfulLogin="Giriş Başarılı";
-        public static string UserRegistered="Kayıt Başarılı";
-        public static string AccessTokenCreated="Token Oluşturuldu";
-        public static string AuthorizationDenied="Yetkiniz Yok";
+        public static string SuccessfulLogin = "Giriş Başarılı";
+        public static string UserRegistered = "Kayıt Başarılı";
+        public static string AccessTokenCreated = "Token Oluşturuldu";
+        public static string AuthorizationDenied = "Yetkiniz Yok";
     }
 }

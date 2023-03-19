@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("https://localhost:7166"));
+    options.AddPolicy("AllowOrigin", builder => builder.WithOrigins("https://localhost:4200"));
 });
 
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -47,7 +47,6 @@ builder.Services.AddDependencyResolvers(new ICoreModule[]
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,6 +55,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

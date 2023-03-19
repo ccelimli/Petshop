@@ -2,6 +2,7 @@
 using Core.Entities.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Context;
+using Entities.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,26 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class UserDal : EntityRepositoryBase<User, PetShopContext>, IUserDal
     {
+        public List<UserDetailDto> GetUserDetails()
+        {
+            using (PetShopContext context = new PetShopContext())
+            {
+                var result = from user in context.Users
+                             select new UserDetailDto
+                             {
+                                 Id = user.Id,
+                                 FirstName = user.FirstName,
+                                 LastName = user.LastName,
+                                 PhoneNumber = user.PhoneNumber,
+                                 Email = user.Email,
+                                 Address = user.Address,
+                                 CompanyName = user.CompanyName,
+                                 CompanyAddress = user.CompanyAddress,
+                             };
+               
+                return result.ToList();
+            };
+        }
         public List<OperationClaim> GetClaims(User user)
         {
             using (var context = new PetShopContext())

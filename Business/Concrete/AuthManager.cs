@@ -6,6 +6,7 @@ using Core.Utilities.Results.Concrete;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT.Abstract;
 using Core.Utilities.Security.JWT.Concrete;
+using Entities.Concrete;
 using Entities.Dto;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,9 @@ namespace Business.Concrete
                 FirstName = userForRegisterDto.FirstName,
                 LastName = userForRegisterDto.LastName,
                 PhoneNumber = userForRegisterDto.PhoneNumber,
+                Address = userForRegisterDto.Address,
+                CompanyName = userForRegisterDto.CompanyName,
+                CompanyAddress = userForRegisterDto.CompanyAddress,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Status = true
@@ -63,14 +67,14 @@ namespace Business.Concrete
         }
 
         // UserExist
-        public IResult UserExists(string email,string phoneNumber)
+        public IResult UserExists(string email, string phoneNumber)
         {
             if (_userService.GetByEmail(email).Data != null)
             {
                 return new ErrorResult(Messages.AlreadyRegistedEmail);
             }
 
-            if (_userService.GetByPhoneNumber(phoneNumber).Data!=null)
+            if (_userService.GetByPhoneNumber(phoneNumber).Data != null)
             {
                 return new ErrorResult(Messages.AlreadyRegistedPhoneNumber);
             }

@@ -9,6 +9,7 @@ namespace PetShop.Entites.Dto
 {
     public class ProductDetailDto : IEntity
     {
+        public int Id { get; set; }
         public string  CategoryName { get; set; }
         public string AnimalName { get; set; }
         public string BrandName { get; set; }

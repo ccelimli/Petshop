@@ -17,21 +17,22 @@ namespace DataAccess.Concrete.EntityFramework
         {
             using (PetShopContext context = new PetShopContext())
             {
-                var GetProductDetail = from p in context.Products
-                                       join c in context.Categories
-                                       on p.CategoryId equals c.CategoryId
-                                       join a in context.Animals
-                                       on p.AnimalId equals a.AnimalId
-                                       join b in context.Brands
-                                       on p.BrandId equals b.BrandId
+                var GetProductDetail = from product in context.Products
+                                       join category in context.Categories
+                                       on product.CategoryId equals category.CategoryId
+                                       join animal in context.Animals
+                                       on product.AnimalId equals animal.AnimalId
+                                       join brand in context.Brands
+                                       on product.BrandId equals brand.BrandId
                                        select new ProductDetailDto
                                        {
-                                           AnimalName = a.AnimalName,
-                                           CategoryName = c.CategoryName,
-                                           BrandName = b.BrandName,
-                                           ProductName = p.ProductName,
-                                           UnitPrice=p.UnitPrice,
-                                           UnitsInStock=p.UnitsInStock,
+                                           Id=product.ProductId,
+                                           AnimalName = animal.AnimalName,
+                                           CategoryName = category.CategoryName,
+                                           BrandName = brand.BrandName,
+                                           ProductName = product.ProductName,
+                                           UnitPrice=product.UnitPrice,
+                                           UnitsInStock=product.UnitsInStock,
                                        };
                 return GetProductDetail.ToList();
             }

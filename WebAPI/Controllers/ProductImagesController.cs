@@ -1,11 +1,7 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace WebAPI.Controllers
 {
@@ -36,8 +32,8 @@ namespace WebAPI.Controllers
         [HttpDelete("delete")]
         public IActionResult Delete(ProductImage productImage)
         {
-            var productDeleteImage=_productImageService.GetByProductId(productImage.ProductId).Data;
-            var result=_productImageService.Delete(productImage);
+            var productImageDelete=_productImageService.GetByImageId(productImage.ProductId).Data;
+            var result=_productImageService.Delete(productImageDelete);
             if (result.Success)
             {
                 return Ok(result);

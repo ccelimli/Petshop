@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Abstract;
+using Core.Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,10 +10,13 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class Customer :IEntity
+    public class Comporate :IEntity
     {
+        
         [Key]
         public int UserId { get; set; }
-        public string Address { get; set; }
+        public User User;
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
     }
 }

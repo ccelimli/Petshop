@@ -33,7 +33,7 @@ namespace Core.Utilities.Helper
             }
             var extension = Path.GetExtension(file.FileName);
             var extensionValid = CheckFileExtensionValid(extension);
-            string guid = Guid.NewGuid().ToString();
+            string guid = GuidHelpers.CreateGuid();
             string filePath = guid + extension;
 
             if (extensionValid.Message != null)

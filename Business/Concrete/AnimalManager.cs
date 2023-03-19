@@ -8,6 +8,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using Entites.Concrete;
+using PetShop.DataAccess.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace Business.Concrete
 {
     public class AnimalManager : IAnimalService
     {
-        AnimalDal _animalDal;
+        IAnimalDal _animalDal;
 
-        public AnimalManager(AnimalDal animalDal)
+        public AnimalManager(IAnimalDal animalDal)
         {
             _animalDal = animalDal;
         }
